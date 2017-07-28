@@ -35,7 +35,7 @@ public class MyHandler extends TextWebSocketHandler {
                                       CloseStatus closeStatus) throws Exception {
         System.out.println("conection closed." + closeStatus);
 
-        WebSocketSessionUtil.add(getUserNameFromSession(session), session);
+        WebSocketSessionUtil.remove(getUserNameFromSession(session));
     }
 
     @Override
