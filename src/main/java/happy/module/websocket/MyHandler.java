@@ -14,6 +14,7 @@ public class MyHandler extends TextWebSocketHandler {
             throws Exception {
         System.out.println("connection established");
         WebSocketSessionUtil.add(getUserNameFromSession(session), session);
+        WebSocketSessionUtil.test(getUserNameFromSession(session), "连接成功");
     }
 
     @Override
@@ -21,13 +22,14 @@ public class MyHandler extends TextWebSocketHandler {
             throws Exception {
         System.out.println("receive a message." + message);
 
-        WebSocketSessionUtil.broadcast(message);
+        WebSocketSessionUtil.broadcast(getUserNameFromSession(session), message);
     }
 
     @Override
     public void handleTransportError(WebSocketSession session,
                                      Throwable exception) throws Exception {
         WebSocketSessionUtil.remove(getUserNameFromSession(session));
+        WebSocketSessionUtil.test(getUserNameFromSession(session), "连接失败");
     }
 
     @Override
@@ -36,6 +38,7 @@ public class MyHandler extends TextWebSocketHandler {
         System.out.println("conection closed." + closeStatus);
 
         WebSocketSessionUtil.remove(getUserNameFromSession(session));
+        WebSocketSessionUtil.test(getUserNameFromSession(session), "退出连接");
     }
 
     @Override

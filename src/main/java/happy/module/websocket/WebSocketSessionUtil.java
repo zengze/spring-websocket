@@ -23,8 +23,22 @@ public class WebSocketSessionUtil {
         clients.remove(userName);
     }
 
-    public static void broadcast(TextMessage message)
+    public static void broadcast(String userName, TextMessage message)
             throws Exception {
+
+        TextMessage msg = new TextMessage(userName + ":" + message.getPayload());
+
+        Set<String> allUsers = clients.keySet();
+
+        for (String name : allUsers) {
+            WebSocketSession session = clients.get(name);
+            session.sendMessage(msg);
+        }
+    }
+
+    public static void test(String userName, String info) throws Exception {
+
+        TextMessage message = new TextMessage(userName + info);
 
         Set<String> allUsers = clients.keySet();
 

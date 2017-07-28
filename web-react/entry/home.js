@@ -29,10 +29,21 @@ class Index extends Component {
     socket = new WebSocket('ws://localhost:8081/spring-websocket/websocket.connection?userName=' + userName);
 
     socket.onopen = function(event) {
-      data.push(<div>websocket open successfully.</div>);
-      that.setState({
-        data: data,
-      });
+      socket.onmessage = function(event) {
+        data.push(<div>{event.data}</div>);
+        that.setState({
+          data: data,
+        });
+      };
+    }
+
+    socket.onerror = function(event) {
+      socket.onmessage = function(event) {
+        data.push(<div>{event.data}</div>);
+        that.setState({
+          data: data,
+        });
+      };
     }
   }
 
@@ -42,10 +53,12 @@ class Index extends Component {
     socket.close();
 
     socket.onclose = function(event) {
-      data.push(<div>websocket close successfully.</div>);
-      that.setState({
-        data: data,
-      });
+      socket.onmessage = function(event) {
+        data.push(<div>{event.data}</div>);
+        that.setState({
+          data: data,
+        });
+      };
     };
   }
 
@@ -56,7 +69,7 @@ class Index extends Component {
     socket.send(message);
 
     socket.onmessage = function(event) {
-      data.push(<div>msg={event.data}</div>);
+      data.push(<div>{event.data}</div>);
       that.setState({
         data: data,
       });
